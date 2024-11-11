@@ -1,4 +1,4 @@
-# tendon-cr-environment
+# tendon_cr_environment
 ROS2 environment for the simulation and control of a tendon-driven continuum robot. 
 
 The purpose of this project is to enable users to run simulations and implement control schemes for a tendon-driven continuum robot. ROS2 Humble was utilized to construct the interactive environment, which allows for the integration of multiple functions operating in parallel and facilitates the transition to the physical implementation of the robot. The simulation of the continuum robot is performed using PyElastica (https://github.com/GazzolaLab/PyElastica). This project’s open-source nature is intended to facilitate code inspection and encourage further development by interested users, whether that involves adding new control schemes, creating interactions between multiple robots, or modifying the actuation mechanism.
