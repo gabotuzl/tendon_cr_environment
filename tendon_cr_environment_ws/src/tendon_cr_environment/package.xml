@@ -1,1 +1,27 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>tendon_cr_environment</name>
+  <version>1.0.0</version>
+  <description>ROS2 environment for the simulation and control of a tendon-driven continuum robot.</description>
+  <maintainer email="gabotuzlaci@gmail.com">gab</maintainer>
+  <license>MIT</license>
 
+  <depend>rclpy</depend>
+  <depend>elastica</depend>
+  <depend>numpy</depend>
+  <depend>collections</depend>
+  <depend>matplotlib</depend>
+  <depend>moviepy</depend>
+  <depend>tkinter</depend>
+  <depend>customtkinter</depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
