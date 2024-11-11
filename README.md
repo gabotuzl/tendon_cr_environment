@@ -36,3 +36,6 @@ The gain searcher node used only in the closed-loop case. It is in charge of asd
 
 ## Installation and usage
 asdasd
+
+## Dependencies
+Rclpy, PyElastica, Numpy, Matplotlib, Moviepy, etc.
