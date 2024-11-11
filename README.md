@@ -33,3 +33,6 @@ The controller node is used only in the closed-loop case. It is in charge of asd
 
 ### Gain searcher node
 The gain searcher node used only in the closed-loop case. It is in charge of asdaasdasdasd
+
+## Installation and usage
+asdasd
