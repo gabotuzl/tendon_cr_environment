@@ -146,14 +146,29 @@ class GUI(customtkinter.CTk):
         self.status_message = customtkinter.CTkLabel(self.status_section, text="", font=customtkinter.CTkFont(size=12, weight="bold"), text_color="black")
         self.status_message.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
 
+        # Procedure for adding the images in the GUI
+        import os
+        from ament_index_python import get_package_share_directory
+
+        package_name = 'tendon_cr_environment'  # Package name
+        global_image_filename = 'images/global_reference_frame.png'
+        local_image_filename = 'images/local_reference_frame.png'
+
+        # Getting the share directory of the package
+        package_share_dir = get_package_share_directory(package_name)
+
+        # Building the full path to the image
+        image_path_global = os.path.join(package_share_dir, global_image_filename)
+        image_path_local = os.path.join(package_share_dir, local_image_filename)
+
         # Global orientation image
-        global_orientation_image_opened = Image.open("~/tendon_cr_environment_ws/src/tendon_cr_environment/tendon_cr_environment/images/global reference frame.png")
+        global_orientation_image_opened = Image.open(image_path_global)
         self.global_orientation_image = customtkinter.CTkImage(light_image=global_orientation_image_opened, dark_image= global_orientation_image_opened, size=(200,200))
         self.global_orientation_image_label = customtkinter.CTkLabel(self.info_section, text="", image=self.global_orientation_image)
         self.global_orientation_image_label.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
 
         # Local orientation image
-        local_orientation_image_opened = Image.open("~/tendon_cr_environment_ws/src/tendon_cr_environment/tendon_cr_environment/images/local reference frame.png")
+        local_orientation_image_opened = Image.open(image_path_local)
         self.local_orientation_image = customtkinter.CTkImage(light_image=local_orientation_image_opened, dark_image= local_orientation_image_opened, size=(200,200))
         self.local_orientation_image_label = customtkinter.CTkLabel(self.info_section, text="", image=self.local_orientation_image)
         self.local_orientation_image_label.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
