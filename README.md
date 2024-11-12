@@ -15,31 +15,40 @@ The logic and math behind QuadTendonForces is very similar to that of TendonForc
 In the case where a different tendon configuration is desired by the user, a new forcing module must be created to suit that specific configuration. The purpose of QuadTendonForces's configuration is to allow for a maximum of ONE concavity change caused by pairs of antagonist tendons.
 
 ## General function of tendon-cr-environment nodes
-The function of the nodes will be broken down in the following sections. For a more in-depth explanation, refer to the work: (**INSERT THESIS HERE**).
+The general function of the nodes will be broken down in the following sections. For a more in-depth explanation, refer to the work: (**INSERT THESIS HERE**).
 
 ### GUI node
-#### Open-loop case
-In the open-loop case, asdasdasd
-#### Closed-loop case
-In the closed-loop case, asdasdasd
+All parameters specified in the GUI's are in SI units.
+#### Open-loop case (GUI manual)
+Provides a simple GUI for the simulation of an open-loop tendon-driven continuum robot system. The user can specify the rod's parameters, the simulation's parameters, as well as whatever custom tendon actuation configuration desired (many tendons can be added to a single system, each having custom parameters).
+#### Closed-loop case (GUI control)
+Provides a simple GUI for the simulation and control of a closed-loop tendon-driven continuum robot system. The user can specify the rod's parameters, the simulation's parameters, the parameters for the QuadTendonForces tendon configuration (custom parameters for the four "long" tendons and custom parameters the four "short" tendons), the desired XYZ tip position for the robot, as well as the proportional gains for the controller which are specified for the "long" tendons as well as the "short" ones. To make use of the gain searching function, this GUI has a checkbox which enables or disables the gain search function. If this function is enabled, the user can specify the time of convergence desired, which will be used to fine tune the proportional gains to reach the desired position in the time specified by the user.
 
 ### Simulator node
+This node is set up in a way that when it receives the information from the GUI node, it can differentiate whether it was sent from the manual GUI or the control GUI, and thus choose which of the tendon actuation external forcing modules to use (TendonForces or QuadTendonForces).
 #### Open-loop case
-In the open-loop case, asdasd
+In a very straight-forward manner, this node receives parameters specified in the manual GUI by the user and runs an open-loop simulation, after which it publishes the results to the visualizer node to be processed and seen by the user.
 #### Closed-loop case
-In the closed-loop case, asdasdasd
+Because the publishing and subscribing of information during the simulation is required, two extra nodes are started and used within the simulator node for these purposes and are used in the PyElastica simulator's callback function. The publishing of information is mostly for the controller node so that it can carry out the processing and control logic, and the subscribing is to update the activated tendons in the system as well as their respective tensions. Once the simulation is carried out, the results are published to the visualizer node to be processed and seen by the user.
 
 ### Visualizer node
-The visualizer node is in charge of asdasdasdasdasd
+This node receives parameters from the chosen GUI node as well as the position and directors history from the simulator node, subsequently creating a video of the evolution of the system in the alotted time (this is saved in the home directory), as well as a 3D plot of the final pose of the robot.
 
 ### Controller node
-The controller node is used only in the closed-loop case. It is in charge of asdasdasdas
+This node receives parameters from the control GUI as well as current information about the simulation taking place. It is in charge of choosing which tendons must be activated to reach the desired XYZ tip position, as well as updating the tensions assigned to each of those activated tendons. In the case that the gain searcher option is activated, it will iteratively change its proportional gains values, as specified by the gain searcher node's logic.
 
 ### Gain searcher node
-The gain searcher node used only in the closed-loop case. It is in charge of asdaasdasdasd
+This node aims to find the best proportional gains to use for the controller node in order to reach the desired XYZ tip position for the robot in the desired time specified by the user. This is done by carrying out simulations while changing the proportional gains accordingly, until a certain tolerance of time taken is reached.
 
 ## Installation and usage
 asdasd
 
 ## Dependencies
-Rclpy, PyElastica, Numpy, Matplotlib, Moviepy, etc.
+- [rclpy](https://github.com/ros2/rclpy)
+- [PyElastica](https://github.com/GazzolaLab/PyElastica)
+- [numpy](https://numpy.org/)
+- [numba](https://numba.pydata.org/)
+- [matplotlib](https://matplotlib.org/)
+- [moviepy](https://zulko.github.io/moviepy/)
+- [customtkinter](https://github.com/TomSchimansky/CustomTkinter)
+- [Pillow](https://pillow.readthedocs.io/en/stable/)
