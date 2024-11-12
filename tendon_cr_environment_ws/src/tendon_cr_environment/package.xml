@@ -7,6 +7,8 @@
   <maintainer email="gabotuzlaci@gmail.com">gab</maintainer>
   <license>MIT</license>
 
+  <exec_depend>ros2launch</exec_depend>
+
   <depend>rclpy</depend>
   <depend>elastica</depend>
   <depend>numpy</depend>
