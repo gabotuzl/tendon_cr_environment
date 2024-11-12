@@ -10,6 +10,11 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', ['launch/control_tcre.launch.py']), # Control launch file
+        ('share/' + package_name + '/launch', ['launch/manual_tcre.launch.py']),  # Manual launch file
+        (f'share/{package_name}/images', ['tendon_cr_environment/images/global_reference_frame.png']), # Global frame reference image
+        (f'share/{package_name}/images', ['tendon_cr_environment/images/local_reference_frame.png']),  # Local frame reference image
+
     ],
     install_requires=['setuptools'],
     zip_safe=True,
