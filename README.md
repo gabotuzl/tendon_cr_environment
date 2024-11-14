@@ -14,11 +14,11 @@ The logic and mathematics behind tendon actuation in the open-loop case are simi
 
 ### Closed-loop Case
 
-The closed-loop scenario necessitates modifications to the [TendonForces](https://github.com/gabotuzl/TendonForces) to accommodate feedback processing and the application of control signals. ROS2 simplifies this task by allowing feedback reception and processing to be handled by a controller node, while only the control signals must be applied to the simulated continuum robot.
+The closed-loop scenario necessitates modifications to [TendonForces](https://github.com/gabotuzl/TendonForces) to accommodate feedback processing and the application of control signals. ROS2 simplifies this task by allowing feedback reception and processing to be handled by a controller node, while only the control signals must be applied to the simulated continuum robot.
 
-For the closed-loop case, we utilize the **QuadTendonForces** module, which allows for active tendon updates and tension adjustments. The logic and mathematics of QuadTendonForces closely resemble those of TendonForces, differing mainly in that the tendon configuration is fixed with four long tendons and four short tendons. User-specified parameters adjust the parameters of these tendons, but tension is managed by the controller node in the ROS2 environment.
+For the closed-loop case, the **QuadTendonForces** module is used, which allows for active tendon updates and tension adjustments. The logic and mathematics of QuadTendonForces closely resemble those of TendonForces, differing mainly in that the tendon configuration is fixed with four long tendons and four short tendons. User-specified parameters adjust the parameters of these tendons (without changing the setup), and tension is managed by the controller node in the ROS2 environment. NOTE: "long" and "short" tendons refer to a setup in which there are a total of 8 rows of tendons and vertebrae located in the global +Z, -Z, +Y, -Y directions (one "short" and one "long" for each direction), the "long" ones being of longer length than the "short" ones. The purpose of this setup is to allow for the contorsion of the robot to allow for ONE concavity change by way of antagonistic tendons of different lengths activated at the same time.
 
-If users desire a different tendon configuration, a new forcing module must be created to cater to that specific setup. The QuadTendonForces module is designed to allow for a maximum of one concavity change caused by pairs of antagonist tendons.
+If users desire a different tendon setup, a new forcing module must be created to cater to that specific setup. The QuadTendonForces module is designed to allow for a maximum of one concavity change caused by pairs of antagonist tendons.
 
 ## Functionality of tendon_cr_environment Nodes
 
@@ -38,7 +38,7 @@ This node facilitates the simulation and control of a closed-loop tendon-driven 
 
 ### Simulator Node
 
-The simulator node intelligently processes input from either the manual GUI or the control GUI, selecting the appropriate tendon actuation external forcing module (TendonForces or QuadTendonForces) accordingly.
+The simulator node processes input from either the manual GUI or the control GUI, selecting the appropriate tendon actuation external forcing module (TendonForces or QuadTendonForces) accordingly, and then running the simulation of the system using [PyElastica](https://github.com/GazzolaLab/PyElastica) as the backend.
 
 #### Open-loop Case
 
@@ -46,15 +46,15 @@ In this straightforward setup, the simulator node receives parameters from the m
 
 #### Closed-loop Case
 
-The closed-loop simulation requires additional nodes for publishing and subscribing to data. Two extra nodes are initiated for this purpose, which are used within the PyElastica simulator's callback function. The published information primarily supports the controller node, while the subscriptions update the activated tendons in the system and their respective tensions. After the simulation, results are published to the visualizer node for processing.
+The closed-loop simulation requires additional nodes for publishing and subscribing to data. Two extra nodes are initiated for this purpose, which are used within PyElastica simulator's callback function. The published information is primarily received by the controller node, while the subscribed information is used update the activated tendons in the system and their respective tensions. After the simulation, results are published to the visualizer node for processing.
 
 ### Visualizer Node
 
-The visualizer node receives parameters from the chosen GUI node, along with position and direction data from the simulator node. It subsequently creates a video of the system's evolution over time (saved to the home directory) and generates a 3D plot of the robot's final pose.
+The visualizer node receives parameters from the chosen GUI node, along with position and directors historical data from the simulator node. It then creates a video of the system's evolution over time (saved to the home directory) and generates a 3D plot of the robot's final pose.
 
 ### Controller Node
 
-This node receives parameters from the control GUI and current simulation information. It determines which tendons should be activated to achieve the desired XYZ tip position and updates the tensions assigned to the activated tendons. If the gain searcher option is activated, it iteratively adjusts the proportional gains based on logic defined by the gain searcher node.
+This node receives parameters from the control GUI as well as current simulation information. It determines which tendons should be activated to achieve the desired XYZ tip position and updates the tensions assigned to the activated tendons. If the gain searcher option is activated, it iteratively adjusts the proportional gains based on logic defined by the gain searcher node.
 
 ### Gain Searcher Node
 
