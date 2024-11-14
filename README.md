@@ -41,9 +41,11 @@ This node receives parameters from the control GUI as well as current informatio
 This node aims to find the best proportional gains to use for the controller node in order to reach the desired XYZ tip position for the robot in the desired time specified by the user. This is done by carrying out simulations while changing the proportional gains accordingly, until a certain tolerance of time taken is reached.
 
 ## Installation and usage
-asdasd
 
-## Dependencies
+### Dependencies
+
+Ensure you have the following prerequisites installed:
+- [ROS 2 Humble](https://docs.ros.org/en/humble/Installation.html)
 - [rclpy](https://github.com/ros2/rclpy)
 - [PyElastica](https://github.com/GazzolaLab/PyElastica)
 - [numpy](https://numpy.org/)
@@ -52,3 +54,103 @@ asdasd
 - [moviepy](https://zulko.github.io/moviepy/)
 - [customtkinter](https://github.com/TomSchimansky/CustomTkinter)
 - [Pillow](https://pillow.readthedocs.io/en/stable/)
+
+### Installation
+
+1. **Clone the Repository**
+
+   Clone this repository to your local machine:
+
+   ```bash
+   git clone https://github.com/gabotuzl/tendon_cr_environment.git
+   cd tendon_cr_environment
+   ```
+
+2. **Build the ROS2 Workspace**
+
+   Navigate to the `environment_ws` folder and build the workspace:
+
+   ```bash
+   cd tendon_cr_environment_ws
+   colcon build
+   ```
+
+3. **Source the Workspace**
+
+   After the build is successful, source the setup script to add the workspace to your ROS2 environment:
+
+   ```bash
+   source install/setup.bash
+   ```
+
+   You may want to add this line to your shell startup file (e.g., `~/.bashrc`) for convenience:
+
+   ```bash
+   echo "source /path/to/repo_name/tendon_cr_environment_ws/install/setup.bash" >> ~/.bashrc
+   ```
+
+### Usage
+
+#### Running the Environment with Launch Files
+To run the full simulation environment, you can use the provided launch files. 
+
+To use the manual (open-loop) simulation environment which contemplates custom tendon configurations, open a terminal and execute:
+
+```bash
+ros2 launch tendon_cr_environment manual_tcre.launch.py
+```
+To use the control (closed-loop) simulation environment which allows for the control of the robot tip's position by using a predetermined tendon setup (with customizable parameters), open a terminal and execute:
+
+```bash
+ros2 launch tendon_cr_environment control_tcre.launch.py
+```
+
+#### Running Nodes Separately
+
+If you prefer to run each node individually, you can do so by following these steps:
+
+1. Open multiple terminal windows (or tabs).
+2. Source the workspace in each terminal:
+
+   ```bash
+   source /path/to/repo_name/tendon_cr_environment_ws/install/setup.bash
+   ```
+
+3. Start each node by running the following commands in separate terminals:
+
+   - **GUI Node(s):**
+     For the open-loop simulation GUI:
+     ```bash
+     ros2 run tendon_cr_enviroment gui_manual_node
+     ```
+     For the closed-loop simulation and control GUI:
+     ```bash
+     ros2 run tendon_cr_environment gui_control_node
+     ```
+
+   - **Simulator Node:**
+
+     ```bash
+     ros2 run tendon_cr_environment simulator_node
+     ```
+     
+   - **Visualizer Node:**
+
+     ```bash
+     ros2 run tendon_cr_environment visualizer_node
+     ```
+     
+   - **Controller Node:**
+
+     ```bash
+     ros2 run tendon_cr_environment controller_node
+     ```
+     
+   - **Gain Searcher Node:**
+
+     ```bash
+     ros2 run tendon_cr_environment gain_searcher_node
+     ```
+
+
+
