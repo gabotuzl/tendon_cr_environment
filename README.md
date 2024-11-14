@@ -10,7 +10,7 @@ The simulation of the continuum robot leverages [PyElastica](https://github.com/
 
 ### Open-loop Case
 
-The logic and mathematics behind tendon actuation in the open-loop case are similar to those described in [TendonForces](https://github.com/gabotuzl/TendonForces). This project supports custom tendon-driven configurations for a continuum robot and requires the specification of the tension applied to each tendon, making it suitable only for open-loop control.
+The logic and mathematics behind tendon actuation in the open-loop case are similar to those described in [TendonForces](https://github.com/gabotuzl/TendonForces), which supports custom tendon-driven configurations for a continuum robot and requires the specification of the tension applied to each tendon, making it suitable only for open-loop control.
 
 ### Closed-loop Case
 
