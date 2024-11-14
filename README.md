@@ -1,44 +1,64 @@
 # tendon_cr_environment
-ROS2 environment for the simulation and control of a tendon-driven continuum robot. 
 
-The purpose of this project is to enable users to run simulations and implement control schemes for a tendon-driven continuum robot. ROS2 Humble was utilized to construct the interactive environment, which allows for the integration of multiple functions operating in parallel and facilitates the transition to the physical implementation of the robot. The simulation of the continuum robot is performed using PyElastica (https://github.com/GazzolaLab/PyElastica). This project’s open-source nature is intended to facilitate code inspection and encourage further development by interested users, whether that involves adding new control schemes, creating interactions between multiple robots, or modifying the actuation mechanism.
+## Overview
 
-## Tendon actuation
-#### Open-loop case
-The logic and math behind the tendon actuation for the open-loop case is the same as is showcased in [TendonForces](https://github.com/gabotuzl/TendonForces). This is because TendonForces allows for custom tendon-driven configurations for a continuum robot. Also, it requires the specification of the tension applied to each tendon, which makes it only useful in an open-loop case.
-#### Closed-loop case
-The closed-loop case requires a modification of the [TendonForces](https://github.com/gabotuzl/TendonForces), as it requires some sort of feedback and subsequent processing and application of the control signal. This is a problem that benefits from the use of ROS2 to solve, as the reception of the feedback data and its processing can be delegated to a controller node in the ROS2 environment, leaving only the reception of the control signal to be applied to the simulated continuum robot. 
+The **tendon_cr_environment** is a ROS2-based environment designed for the simulation and control of a tendon-driven continuum robot. This project enables users to run simulations and implement control schemes for the robot. Built on ROS2 Humble, the interactive environment supports the integration of multiple functions operating in parallel, facilitating a smooth transition to physical robot implementation.
 
-Given this alleviation, the external forcing module that is used for the closed-loop case is QuadTendonForces, which allows for the updating of the active tendons and their respective tensions.
-The logic and math behind QuadTendonForces is very similar to that of TendonForces, except that the tendon configuration is fixed (there are four long tendons and four short tendons, however their parameters can be specified by the user), and tension is not specified by the user, but rather the controller node in the ROS2 environment.
+The simulation of the continuum robot leverages [PyElastica](https://github.com/GazzolaLab/PyElastica) for its backend processing. The open-source nature of this project encourages code inspection and further development by users, whether that involves adding new control schemes, creating interactions between multiple robots, or modifying the actuation mechanisms.
 
-In the case where a different tendon configuration is desired by the user, a new forcing module must be created to suit that specific configuration. The purpose of QuadTendonForces's configuration is to allow for a maximum of ONE concavity change caused by pairs of antagonist tendons.
+## Tendon Actuation
 
-## General function of tendon-cr-environment nodes
-The general function of the nodes will be broken down in the following sections. For a more in-depth explanation, refer to the work: (**INSERT THESIS HERE**).
+### Open-loop Case
 
-### GUI node
-All parameters specified in the GUI's are in SI units.
-#### Open-loop case (GUI manual)
-Provides a simple GUI for the simulation of an open-loop tendon-driven continuum robot system. The user can specify the rod's parameters, the simulation's parameters, as well as whatever custom tendon actuation configuration desired (many tendons can be added to a single system, each having custom parameters).
-#### Closed-loop case (GUI control)
-Provides a simple GUI for the simulation and control of a closed-loop tendon-driven continuum robot system. The user can specify the rod's parameters, the simulation's parameters, the parameters for the QuadTendonForces tendon configuration (custom parameters for the four "long" tendons and custom parameters the four "short" tendons), the desired XYZ tip position for the robot, as well as the proportional gains for the controller which are specified for the "long" tendons as well as the "short" ones. To make use of the gain searching function, this GUI has a checkbox which enables or disables the gain search function. If this function is enabled, the user can specify the time of convergence desired, which will be used to fine tune the proportional gains to reach the desired position in the time specified by the user.
+The logic and mathematics behind tendon actuation in the open-loop case are similar to those described in [TendonForces](https://github.com/gabotuzl/TendonForces). This project supports custom tendon-driven configurations for a continuum robot and requires the specification of the tension applied to each tendon, making it suitable only for open-loop control.
 
-### Simulator node
-This node is set up in a way that when it receives the information from the GUI node, it can differentiate whether it was sent from the manual GUI or the control GUI, and thus choose which of the tendon actuation external forcing modules to use (TendonForces or QuadTendonForces).
-#### Open-loop case
-In a very straight-forward manner, this node receives parameters specified in the manual GUI by the user and runs an open-loop simulation, after which it publishes the results to the visualizer node to be processed and seen by the user.
-#### Closed-loop case
-Because the publishing and subscribing of information during the simulation is required, two extra nodes are started and used within the simulator node for these purposes and are used in the PyElastica simulator's callback function. The publishing of information is mostly for the controller node so that it can carry out the processing and control logic, and the subscribing is to update the activated tendons in the system as well as their respective tensions. Once the simulation is carried out, the results are published to the visualizer node to be processed and seen by the user.
+### Closed-loop Case
 
-### Visualizer node
-This node receives parameters from the chosen GUI node as well as the position and directors history from the simulator node, subsequently creating a video of the evolution of the system in the alotted time (this is saved in the home directory), as well as a 3D plot of the final pose of the robot.
+The closed-loop scenario necessitates modifications to the [TendonForces](https://github.com/gabotuzl/TendonForces) to accommodate feedback processing and the application of control signals. ROS2 simplifies this task by allowing feedback reception and processing to be handled by a controller node, while only the control signals must be applied to the simulated continuum robot.
 
-### Controller node
-This node receives parameters from the control GUI as well as current information about the simulation taking place. It is in charge of choosing which tendons must be activated to reach the desired XYZ tip position, as well as updating the tensions assigned to each of those activated tendons. In the case that the gain searcher option is activated, it will iteratively change its proportional gains values, as specified by the gain searcher node's logic.
+For the closed-loop case, we utilize the **QuadTendonForces** module, which allows for active tendon updates and tension adjustments. The logic and mathematics of QuadTendonForces closely resemble those of TendonForces, differing mainly in that the tendon configuration is fixed with four long tendons and four short tendons. User-specified parameters adjust the parameters of these tendons, but tension is managed by the controller node in the ROS2 environment.
 
-### Gain searcher node
-This node aims to find the best proportional gains to use for the controller node in order to reach the desired XYZ tip position for the robot in the desired time specified by the user. This is done by carrying out simulations while changing the proportional gains accordingly, until a certain tolerance of time taken is reached.
+If users desire a different tendon configuration, a new forcing module must be created to cater to that specific setup. The QuadTendonForces module is designed to allow for a maximum of one concavity change caused by pairs of antagonist tendons.
+
+## Functionality of tendon_cr_environment Nodes
+
+The functionality of the nodes in this project is described in the following sections. For a more in-depth overview, please refer to: **INSERT THESIS HERE**.
+
+### GUI Node
+
+All parameters specified in the GUI are in SI units.
+
+#### Open-loop Case (GUI Manual)
+
+This node provides a user-friendly GUI for simulating an open-loop tendon-driven continuum robot system. Users can specify the parameters for the rod, simulation, and a custom tendon actuation configuration, with the ability to add multiple tendons, each having its own custom parameters.
+
+#### Closed-loop Case (GUI Control)
+
+This node facilitates the simulation and control of a closed-loop tendon-driven continuum robot system. Users can specify the rod's parameters, simulation parameters, and QuadTendonForces configuration parameters for the long and short tendons. Additionally, users can define the desired XYZ tip position for the robot and set the proportional gains for the controller. The GUI includes a gain search function, allowing users to specify a desired convergence time, which is then used to fine-tune the proportional gains for achieving the desired position within the specified time.
+
+### Simulator Node
+
+The simulator node intelligently processes input from either the manual GUI or the control GUI, selecting the appropriate tendon actuation external forcing module (TendonForces or QuadTendonForces) accordingly.
+
+#### Open-loop Case
+
+In this straightforward setup, the simulator node receives parameters from the manual GUI, runs an open-loop simulation, and publishes the results to the visualizer node for user review.
+
+#### Closed-loop Case
+
+The closed-loop simulation requires additional nodes for publishing and subscribing to data. Two extra nodes are initiated for this purpose, which are used within the PyElastica simulator's callback function. The published information primarily supports the controller node, while the subscriptions update the activated tendons in the system and their respective tensions. After the simulation, results are published to the visualizer node for processing.
+
+### Visualizer Node
+
+The visualizer node receives parameters from the chosen GUI node, along with position and direction data from the simulator node. It subsequently creates a video of the system's evolution over time (saved to the home directory) and generates a 3D plot of the robot's final pose.
+
+### Controller Node
+
+This node receives parameters from the control GUI and current simulation information. It determines which tendons should be activated to achieve the desired XYZ tip position and updates the tensions assigned to the activated tendons. If the gain searcher option is activated, it iteratively adjusts the proportional gains based on logic defined by the gain searcher node.
+
+### Gain Searcher Node
+
+The gain searcher node's goal is to identify optimal proportional gains for the controller node, to reach the desired XYZ tip position within the specified time frame. This is accomplished through simulations that vary the proportional gains until the required time tolerance is met.
 
 ## Installation and usage
 
