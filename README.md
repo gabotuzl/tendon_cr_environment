@@ -22,7 +22,7 @@ If users desire a different tendon setup, a new forcing module must be created t
 
 ## Functionality of tendon_cr_environment Nodes
 
-The functionality of the nodes in this project is described in the following sections. For a more in-depth overview, please refer to: **INSERT THESIS HERE**.
+The functionality of the nodes in this project is described in the following sections. For a more in-depth overview, please refer to: **Final Thesis (tendon_cr_environment).pdf**. Located in this same repo. The thesis is written in Spanish, so translation might be needed for reading. ROS2 implementation begins on page 77.
 
 ### GUI Node
 
